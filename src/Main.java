@@ -17,6 +17,7 @@ public class Main {
 				String pathToOutput = args[1];
 				if(convertFiles) convertFiles(true, pathToTrain, pathToData, pathToOutput);
 				classifyBayesFold(pathToOutput);
+				classifyIBkFold(pathToOutput, 5);
 			} else {
 				System.out.println("Not every parameter set (Length must be 2)");
 			}
@@ -40,11 +41,11 @@ public class Main {
         }
 	}
 	
-	private static void classifyIBkFold(String pathToOutput) {
+	private static void classifyIBkFold(String pathToOutput, int k) {
 		ExecutorService executor = Executors.newFixedThreadPool(4);
 		for(int i=1; i <= numberOfFolds; i++) {
 			final int zw = i;
-			executor.execute(new Thread(() -> System.out.println("Fold: " + zw + " Correct:" + classifyIBk(zw, false, pathToOutput))));
+			executor.execute(new Thread(() -> System.out.println("Fold: " + zw + " Correct:" + classifyIBk(zw, false, pathToOutput, k))));
 		}
 		executor.shutdown();
         while (!executor.isTerminated()) {
@@ -69,9 +70,9 @@ public class Main {
         return classifier.naiveBayes(debugOutput);
 	}
 	
-	private static double classifyIBk(int number, boolean debugOutput, String pathToOutput) {
+	private static double classifyIBk(int number, boolean debugOutput, String pathToOutput, int k) {
         Classifier classifier = new Classifier(new File(pathToOutput + "combinedFold" + number + ".arff"), new File(pathToOutput + "combinedFold" + number + "Test.arff"));
-        return classifier.ibk(debugOutput);
+        return classifier.ibk(debugOutput, k);
 	}
 
 }

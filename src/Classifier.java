@@ -20,7 +20,17 @@ public class Classifier {
 	public double ibk(boolean output) {
 		try {
 			System.out.println("Start IBk");
-			return executeClassifier(new IBk(), output);
+			return executeClassifier(new IBk(), -1, output);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public double ibk(boolean output, int k) {
+		try {
+			System.out.println("Start IBk");
+			return executeClassifier(new IBk(),k, output);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -30,19 +40,22 @@ public class Classifier {
 	public double naiveBayes(boolean output) {
 		try {
 			System.out.println("Start Bayes");
-			return executeClassifier(new NaiveBayes(), output);
+			return executeClassifier(new NaiveBayes(), -1, output);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0d;
 		}
 	}
 	
-	private double executeClassifier(weka.classifiers.Classifier classi, boolean output) throws Exception {
+	private double executeClassifier(weka.classifiers.Classifier classi, int k, boolean output) throws Exception {
 		System.out.println("Start " + classi.getClass().getName());
 		
 		Instances trainData = getInstance(arffTrain);
 		Instances test = getInstance(arffTest);
 		classi.buildClassifier(trainData);
+		if(k != -1 && classi instanceof IBk) {
+			((IBk)classi).setKNN(k);
+		}
 		if(output)System.out.println(classi);
 		else System.out.println("Model Done!");
 		
