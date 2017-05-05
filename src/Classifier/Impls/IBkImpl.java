@@ -5,7 +5,9 @@ import java.io.File;
 import Classifier.AbsClassifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.lazy.IBk;
+import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ArffLoader;
 
 public class IBkImpl extends AbsClassifier{
 
@@ -25,12 +27,22 @@ public class IBkImpl extends AbsClassifier{
 		IBk classi = new IBk();
 		System.out.println("Start " + classi.getClass().getName());
 		
-		Instances trainData = getInstance(arffTrain);
-		classi.buildClassifier(trainData);
+		//Instances trainData = getInstance(arffTrain);
+		ArffLoader loader = getLoader(arffTrain);
+		Instances structure = getStructure(loader);
 		
 		if(this.k >= 1 ) {
 			classi.setKNN(k);
 		}
+		
+		Instance current;
+		classi.buildClassifier(structure);
+		
+		while ((current = loader.getNextInstance(structure)) != null)
+			   classi.updateClassifier(current);
+		
+		//classi.buildClassifier(trainData);
+		
 		
 		if(output)System.out.println(classi);
 		else System.out.println("Model Done!");

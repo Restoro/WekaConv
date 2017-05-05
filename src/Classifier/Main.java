@@ -13,9 +13,10 @@ import weka.classifiers.Evaluation;
 public class Main {
 
 	static final int dataLineCount = 1500;
-	static final int randomNumberCount = 100;
+	static final int randomNumberCount = 20;
 	static final int numberOfFolds = 4;
-	static final boolean convertFiles = false;
+	static final boolean convertFiles = true;
+	static final boolean useRandomData = true;
 
 	public static void main(String[] args) {
 		try {
@@ -23,8 +24,8 @@ public class Main {
 				String pathToTrain = System.getProperty("user.dir") + "/resources/";
 				String pathToData = args[0];
 				String pathToOutput = args[1];
-				if(convertFiles) convertFiles(true, pathToTrain, pathToData, pathToOutput);
-				classifyFold(Classifiers.NaiveBayes, pathToOutput, null);
+				if(convertFiles) convertFiles(useRandomData, pathToTrain, pathToData, pathToOutput);
+				classifyFold(Classifiers.IBk, pathToOutput, new int[] {1});
 				//classifyBayesFold(pathToOutput);
 				//for(int i=1;i<=100;i=i==1?5:i + 5)
 				//	classifyFold(Classifiers.IBk, pathToOutput, new int[] {i});

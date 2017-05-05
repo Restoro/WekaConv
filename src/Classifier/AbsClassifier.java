@@ -42,4 +42,15 @@ abstract public class AbsClassifier {
 		returnInstance.setClassIndex(returnInstance.numAttributes() - 1);
 		return returnInstance;
 	}
+	
+	protected Instances getStructure(File arffFile) throws IOException {
+		ArffLoader loader = getLoader(arffFile);
+		return getStructure(loader);
+	}
+	
+	protected Instances getStructure(ArffLoader loader) throws IOException{
+		Instances structure = loader.getStructure();
+		structure.setClassIndex(structure.numAttributes() -1 );
+		return structure;
+	}
 }
