@@ -15,7 +15,7 @@ public class Main {
 	static final int dataLineCount = 1500;
 	static final int randomNumberCount = 20;
 	static final int numberOfFolds = 4;
-	static final boolean convertFiles = true;
+	static final boolean convertFiles = false;
 	static final boolean useRandomData = true;
 
 	public static void main(String[] args) {
@@ -25,9 +25,9 @@ public class Main {
 				String pathToData = args[0];
 				String pathToOutput = args[1];
 				if(convertFiles) convertFiles(useRandomData, pathToTrain, pathToData, pathToOutput);
-				classifyFold(Classifiers.IBk, pathToOutput, new int[] {1});
+				classifyFold(Classifiers.NaiveBayes, pathToOutput, null);
 				//classifyBayesFold(pathToOutput);
-				//for(int i=1;i<=100;i=i==1?5:i + 5)
+				//for(int i=5;i<=100;i+=10)
 				//	classifyFold(Classifiers.IBk, pathToOutput, new int[] {i});
 			} else {
 				System.out.println("Not every parameter set (Length must be 2)");
@@ -65,7 +65,8 @@ public class Main {
 		for(int i=0; i < taskList.size(); i++) {
 			Future<Evaluation> task = taskList.get(i);
 			Evaluation result = task.get();
-			System.out.println("Fold:" + (i+1) + " Correct:" + result.pctCorrect());
+			System.out.println("Fold:" + (i+1) + " Correct:" + result.pctCorrect() + " Error Rate:" + result.errorRate());
+			
 			crossValiAcc += result.pctCorrect();
 		}
 		System.out.println("CrossValidation Correct:" + (crossValiAcc/taskList.size()));

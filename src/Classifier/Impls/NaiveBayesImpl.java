@@ -3,6 +3,7 @@ package Classifier.Impls;
 import java.io.File;
 
 import Classifier.AbsClassifier;
+import weka.attributeSelection.PrincipalComponents;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Instance;
@@ -10,7 +11,7 @@ import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 
 public class NaiveBayesImpl extends AbsClassifier{
-
+	
 	public NaiveBayesImpl(File arffTrain, File arffTest) {
 		super(arffTrain, arffTest);
 	}
