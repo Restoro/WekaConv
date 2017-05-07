@@ -15,10 +15,10 @@ import java.io.IOException;
 public abstract class AbsPCAClassifier extends AbsClassifier {
 
     String[] options = null;
-    PrincipalComponents pca;
+    PrincipalComponents pca = null;
 
     public AbsPCAClassifier(File arffTrain, File arffTest) {
-        this(arffTrain, arffTest,"-C");
+        this(arffTrain, arffTest,"-R","1.0","-C");
     }
 
     public AbsPCAClassifier(File arffTrain, File arffTest, String... options) {
@@ -36,12 +36,8 @@ public abstract class AbsPCAClassifier extends AbsClassifier {
 
     protected Instances getTransformedData(Instances instances){
         try {
-            if(pca == null){
-                pca = new PrincipalComponents();
-                //pca.setInputFormat(super.getInstance(arffTrain));
-
-                pca.buildEvaluator(super.getInstance(arffTrain));
-            } return /*Filter.useFilter(instances,pca);*/pca.transformedData(instances);
+            if(pca == null) initPCA();
+            return pca.transformedData(instances);
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
@@ -50,15 +46,18 @@ public abstract class AbsPCAClassifier extends AbsClassifier {
 
     protected Instance convertInstance(Instance instance) throws Exception {
         try {
-            if(pca == null){
-                pca = new PrincipalComponents();
-                //pca.setInputFormat(super.getInstance(arffTrain));
-                //pca.buildEvaluator(super.getInstance(arffTrain));
-            } return null;//pca.convertInstance(instance);
+            if(pca == null) initPCA();
+            return pca.convertInstance(instance);
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
         return null;//pca.convertInstance(instance);
+    }
+
+    private void initPCA() throws Exception{
+        pca = new PrincipalComponents();
+        pca.setOptions(options);
+        pca.buildEvaluator(super.getInstance(arffTrain));
     }
 
 
