@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import Enums.Classes;
 import weka.classifiers.Evaluation;
@@ -55,19 +57,35 @@ abstract public class AbsClassifier {
 	protected String voteOnEvaluation(weka.classifiers.Classifier classi, File selectedArff) throws Exception {
 		Instances testFile = getInstance(selectedArff);
 		int maximumIndex = 0;
+		int[] classes = new int[15];
 		for(int i=0; i < testFile.numInstances(); i++) {
-			int[] classes = new int[15];
 			int val = (int) classi.classifyInstance(testFile.instance(i));
 			classes[val] += 1;
 			if(classes[val] > classes[maximumIndex]) {
 				maximumIndex = val;
 			}
 		}
-		return Classes.fromOrdinal(maximumIndex).name();
+		String predictedClass = Classes.fromOrdinal(maximumIndex).name();
+		//System.out.println(generateVoteTable(classes, predictedClass));
+		return predictedClass;
+	}
+	
+	private String generateVoteTable(int[] classes, String predicted) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Classes --- Predicted: ");
+		sb.append(predicted);
+		sb.append("\n");
+		for(Classes clazz : Classes.values()) {
+			int count = classes[clazz.ordinal()];
+			sb.append(clazz + " - " + count + "\n");
+		}
+		sb.append("END -------------\n");
+		return sb.toString();
 	}
 	
 	//Testfile = textDatei
 	protected float evaluateClassifierSegment(weka.classifiers.Classifier classi) throws Exception {
+		System.out.println("Start Voting for classifier " + classi.getClass().getName());
 		BufferedReader reader = new BufferedReader(new FileReader(testFile));
 		String line;
 		int count = 0;
