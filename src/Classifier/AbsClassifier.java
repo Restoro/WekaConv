@@ -137,9 +137,14 @@ abstract public class AbsClassifier {
 	}
 	
 	public weka.classifiers.Classifier loadOrGenerateClassifier(boolean useSave) throws Exception {
-		weka.classifiers.Classifier classifier = this.loadClassifier();
-		if(classifier == null) {
-			System.out.println("Found no model for " + this.getClassifierName() + " with test file " + this.arffTrain.getName());
+		weka.classifiers.Classifier classifier;
+		if(useSave) {
+			classifier = this.loadClassifier();
+			if(classifier == null) {
+				System.out.println("Found no model for " + this.getClassifierName() + " with test file " + this.arffTrain.getName());
+				classifier = this.generateClassifier(useSave);
+			}
+		} else {
 			classifier = this.generateClassifier(useSave);
 		}
 		return classifier;
