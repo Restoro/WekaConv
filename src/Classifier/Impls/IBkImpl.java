@@ -67,4 +67,9 @@ public class IBkImpl extends AbsClassifier{
 		System.out.println("Model Done!");
 		return classi;
 	}
+
+	@Override
+	public String getClassifierName() {
+		return IBk.class.getSimpleName();
+	}
 }

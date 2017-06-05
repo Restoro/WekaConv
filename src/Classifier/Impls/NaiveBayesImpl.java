@@ -51,5 +51,10 @@ public class NaiveBayesImpl extends AbsClassifier{
 	public Float executeSegmentClassifier(boolean output, boolean useSave) throws Exception {
 		return this.loadModelExecuteSegment(NaiveBayes.class.getSimpleName(), useSave);
 	}
+
+	@Override
+	public String getClassifierName() {
+		return NaiveBayes.class.getSimpleName();
+	}
 	
 }

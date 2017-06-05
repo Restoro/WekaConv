@@ -23,6 +23,8 @@ abstract public class AbsClassifier {
 		this.pathToData = pathToData;
 	}
 	
+	abstract public String getClassifierName();
+	
 	abstract public weka.classifiers.Classifier generateClassifier(boolean saveModel) throws Exception;
 	
 	abstract public Evaluation executeClassifier(boolean output, boolean useSave) throws Exception;
@@ -33,11 +35,7 @@ abstract public class AbsClassifier {
 	
 	protected Float loadModelExecuteSegment(String className, boolean useSave) throws Exception {
 		if (useSave) {
-			weka.classifiers.Classifier classi = (weka.classifiers.Classifier) loadClassifier(className);
-			if (classi == null) {
-				System.out.println("Found no Model for " + className);
-				classi = (weka.classifiers.Classifier) this.generateClassifier(true);
-			}
+			weka.classifiers.Classifier classi = this.loadOrGenerateClassifier(useSave);
 			return evaluateClassifierSegment(classi);
 		} else {
 			return evaluateClassifierSegment(this.generateClassifier(false));
@@ -133,16 +131,25 @@ abstract public class AbsClassifier {
 	}
 	
 	protected void saveClassifier(weka.classifiers.Classifier classi) throws Exception {
-		System.out.println("Save model for classifier " + classi.getClass().getSimpleName() + " with train file " + this.arffTrain.getName());
-		String path = System.getProperty("user.dir") + "/models/" + classi.getClass().getSimpleName() + "_" + this.arffTrain.getName() + ".model";
+		System.out.println("Save model for classifier " + this.getClassifierName() + " with train file " + this.arffTrain.getName());
+		String path = System.getProperty("user.dir") + "/models/" + this.getClassifierName() + "_" + this.arffTrain.getName() + ".model";
 		weka.core.SerializationHelper.write(path, classi);
 	}
 	
-	protected weka.classifiers.Classifier loadClassifier(String classiName) throws Exception
+	public weka.classifiers.Classifier loadOrGenerateClassifier(boolean useSave) throws Exception {
+		weka.classifiers.Classifier classifier = this.loadClassifier();
+		if(classifier == null) {
+			System.out.println("Found no model for " + this.getClassifierName() + " with test file " + this.arffTrain.getName());
+			classifier = this.generateClassifier(useSave);
+		}
+		return classifier;
+	}
+	
+	public weka.classifiers.Classifier loadClassifier() throws Exception
 	{
-		String fileName = System.getProperty("user.dir") + "/models/" + classiName + "_" + this.arffTrain.getName() + ".model";
+		String fileName = System.getProperty("user.dir") + "/models/" + this.getClassifierName() + "_" + this.arffTrain.getName() + ".model";
 		if(new File(fileName).isFile()) {
-			System.out.println("Load model for classifier " + classiName + " with train file " + this.arffTrain.getName());
+			System.out.println("Load model for classifier " + this.getClassifierName() + " with train file " + this.arffTrain.getName());
 			return (weka.classifiers.Classifier) weka.core.SerializationHelper.read(fileName);
 		} else {
 			return null;

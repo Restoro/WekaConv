@@ -13,10 +13,10 @@ public class RandomForestImpl extends AbsClassifier {
 	int iterations;
 	int numOfThreads;
 
-	public RandomForestImpl(File arffTrain, File arffTest, String pathToData) {
-		super(arffTrain, arffTest, pathToData);
-		this.iterations = 100;
-		this.numOfThreads = 1;
+	public RandomForestImpl(File arffTrain, File testFile, String pathToData) {
+		super(arffTrain, testFile, pathToData);
+		this.iterations = 120;
+		this.numOfThreads = 8;
 	}
 
 	@Override
@@ -57,6 +57,11 @@ public class RandomForestImpl extends AbsClassifier {
 			saveClassifier(classi);
 
 		return classi;
+	}
+
+	@Override
+	public String getClassifierName() {
+		return RandomForest.class.getSimpleName();
 	}
 
 }

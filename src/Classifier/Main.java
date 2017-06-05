@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import Classifier.Impls.IBkImpl;
 import Classifier.Impls.NaiveBayesImpl;
 import Classifier.Impls.RandomForestImpl;
+import Classifier.Impls.VoteImpl;
 import Enums.Classifiers;
 import weka.classifiers.Evaluation;
 
@@ -29,7 +30,7 @@ public class Main {
 				String pathToOutput = args[1];
 				if(convertFiles) convertFiles(useRandomData, pathToTrain, pathToData, pathToOutput);
 				//classifySegmentFold(Classifiers.NaiveBayes, pathToData, pathToOutput, null, false, true);
-				classifySegmentFoldNoThread(Classifiers.RandomForest, pathToData, pathToOutput, new int[] {120, 8}, false, true);
+				classifySegmentFoldNoThread(Classifiers.Vote, pathToData, pathToOutput, null, false, true);
 			} else {
 				System.out.println("Not every parameter set (Length must be 2)");
 			}
@@ -147,6 +148,8 @@ public class Main {
 			return new NaiveBayesImpl(arffTrain, testFile, pathToData);
 		case RandomForest:
 			return new RandomForestImpl(arffTrain, testFile, pathToData);
+		case Vote:
+			return new VoteImpl(arffTrain, testFile, pathToData);
 		default:
 			return null; //Should not happen!
 		}
