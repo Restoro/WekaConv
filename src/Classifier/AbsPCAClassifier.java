@@ -17,12 +17,12 @@ public abstract class AbsPCAClassifier extends AbsClassifier {
     String[] options = null;
     PrincipalComponents pca = null;
 
-    public AbsPCAClassifier(File arffTrain, File arffTest) {
-        this(arffTrain, arffTest,"-R","1.0","-C");
+    public AbsPCAClassifier(File arffTrain, File arffTest, String pathToData) {
+        this(arffTrain, arffTest, pathToData,"-R","1.0","-C");
     }
 
-    public AbsPCAClassifier(File arffTrain, File arffTest, String... options) {
-        super(arffTrain, arffTest);
+    public AbsPCAClassifier(File arffTrain, File arffTest, String pathToData, String... options) {
+        super(arffTrain, arffTest, pathToData);
         this.options = options;
     }
 

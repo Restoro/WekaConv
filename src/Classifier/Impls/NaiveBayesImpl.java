@@ -3,7 +3,7 @@ package Classifier.Impls;
 import java.io.File;
 
 import Classifier.AbsClassifier;
-import weka.attributeSelection.PrincipalComponents;
+import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Instance;
@@ -12,16 +12,26 @@ import weka.core.converters.ArffLoader;
 
 public class NaiveBayesImpl extends AbsClassifier{
 	
-	public NaiveBayesImpl(File arffTrain, File arffTest) {
-		super(arffTrain, arffTest);
+	public NaiveBayesImpl(File arffTrain, File testFile, String pathToData) {
+		super(arffTrain, testFile, pathToData);
 	}
 
 	@Override
-	public Evaluation executeClassifier(boolean output) throws Exception {
+	public Evaluation executeClassifier(boolean output , boolean useSave) throws Exception {
+		return evaluateClassifier(this.generateClassifier(false), output);
+	}
+	
+
+	@Override
+	public boolean setParams(int[] param) {
+		return true; //No params to set
+	}
+
+	@Override
+	public Classifier generateClassifier(boolean saveModel) throws Exception {
 		NaiveBayes classi = new NaiveBayes();
 		System.out.println("Start " + classi.getClass().getName());
 		
-		//Instances trainData = getInstance(arffTrain);
 		ArffLoader loader = getLoader(arffTrain);
 		Instances structure = getStructure(loader);
 		Instance current;
@@ -30,15 +40,16 @@ public class NaiveBayesImpl extends AbsClassifier{
 		while ((current = loader.getNextInstance(structure)) != null)
 			   classi.updateClassifier(current);
 
-		if(output)System.out.println(classi);
-		else System.out.println("Model Done!");
+		System.out.println("Model Done!");
+		if (saveModel)
+			saveClassifier(classi);
 		
-		return evaluateClassifier(classi, output);
+		return classi;
 	}
 
 	@Override
-	public boolean setParams(int[] param) {
-		return true; //No params to set
+	public Float executeSegmentClassifier(boolean output, boolean useSave) throws Exception {
+		return this.loadModelExecuteSegment(NaiveBayes.class.getSimpleName(), useSave);
 	}
 	
 }

@@ -15,7 +15,7 @@ public class MyCallable implements Callable<Evaluation> {
 
 	@Override
 	public Evaluation call() throws Exception {
-		return classi.executeClassifier(fullOutput);
+		return classi.executeClassifier(fullOutput, false);
 	}
 
 }

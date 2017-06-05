@@ -31,6 +31,13 @@ public class Converter {
 			writeArffFile(pathToDataSelect, pathToData, pathToOutput, selectRandom);
 		}));
 	}
+	
+	public void executeInThreadFull(ExecutorService exe, String pathToDataSelect, String pathToData,
+			String pathToOutput, boolean selectRandom) {
+		exe.execute(new Thread(() -> {
+			writeFullArffFile(pathToData, pathToOutput);
+		}));
+	}
 
 	private void writeIntoArffFile(boolean header, String line, BufferedWriter writer, String pathToData,
 			boolean selectRandom) throws IOException {
@@ -44,23 +51,25 @@ public class Converter {
 			}
 		}
 		int randomCounter = 1;
+		int instanceCounter = 0;
 		Random r = new Random();
 		int randomSelector = r.nextInt(dataLineCount / randomNumberCount) + 1;
 		while ((arffLine = arffReader.readLine()) != null) {
 			if (!selectRandom) {
 				writer.write(arffLine + "\n");
-			} else if (randomCounter % randomSelector == 0) {
+			} else if (randomCounter % randomSelector == 0 && instanceCounter < randomNumberCount) {
 				writer.write(arffLine + "\n");
 				randomSelector = r.nextInt(dataLineCount / randomNumberCount) + 1;
 				randomCounter = 1;
 			} else {
 				randomCounter++;
 			}
+			instanceCounter++;
 		}
 		arffReader.close();
 	}
 
-	private void writeFullArffFile(String pathToData, String pathToOutput) {
+	public void writeFullArffFile(String pathToData, String pathToOutput) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(pathToOutput, true));
 			File folder = new File(pathToData);
