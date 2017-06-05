@@ -100,6 +100,9 @@ abstract public class AbsClassifier {
 				correct++;
 			}
 			count++;
+			if(count%50 == 0) {
+				System.out.println("Predicted segments:" + count);
+			}
 		}
 		float percentage = ((float) correct) / count;
 		reader.close();

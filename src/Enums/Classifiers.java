@@ -5,5 +5,6 @@ public enum Classifiers {
 	NaiveBayes,
 	RandomForest,
 	Vote,
-	Stack
+	Stack,
+	SMO
 }

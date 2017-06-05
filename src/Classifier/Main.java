@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import Classifier.Impls.IBkImpl;
 import Classifier.Impls.NaiveBayesImpl;
 import Classifier.Impls.RandomForestImpl;
+import Classifier.Impls.SVMImpl;
 import Classifier.Impls.StackClassifierImpl;
 import Classifier.Impls.VoteImpl;
 import Enums.Classifiers;
@@ -18,7 +19,7 @@ import weka.classifiers.Evaluation;
 public class Main {
 
 	static final int dataLineCount = 1500;
-	static final int randomNumberCount = 250;
+	static final int randomNumberCount = 20;
 	static final int numberOfFolds = 4;
 	static final boolean convertFiles = false;
 	static final boolean useRandomData = true;
@@ -31,7 +32,7 @@ public class Main {
 				String pathToOutput = args[1];
 				if(convertFiles) convertFiles(useRandomData, pathToTrain, pathToData, pathToOutput);
 				//classifySegmentFold(Classifiers.NaiveBayes, pathToData, pathToOutput, null, false, true);
-				classifySegmentFoldNoThread(Classifiers.Stack, pathToData, pathToOutput, null, false, true);
+				classifySegmentFoldNoThread(Classifiers.SMO, pathToData, pathToOutput, new int[] {1024,512}, false, true);
 			} else {
 				System.out.println("Not every parameter set (Length must be 2)");
 			}
@@ -156,6 +157,8 @@ public class Main {
 			return new VoteImpl(arffTrain, testFile, pathToData);
 		case Stack:
 			return new StackClassifierImpl(arffTrain, trainFile, testFile, pathToData);
+		case SMO:
+			return new SVMImpl(arffTrain, testFile, pathToData);
 		default:
 			return null; //Should not happen!
 		}
