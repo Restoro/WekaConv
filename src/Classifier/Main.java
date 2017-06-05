@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import Classifier.Impls.IBkImpl;
 import Classifier.Impls.NaiveBayesImpl;
 import Classifier.Impls.RandomForestImpl;
+import Classifier.Impls.StackClassifierImpl;
 import Classifier.Impls.VoteImpl;
 import Enums.Classifiers;
 import weka.classifiers.Evaluation;
@@ -30,11 +31,12 @@ public class Main {
 				String pathToOutput = args[1];
 				if(convertFiles) convertFiles(useRandomData, pathToTrain, pathToData, pathToOutput);
 				//classifySegmentFold(Classifiers.NaiveBayes, pathToData, pathToOutput, null, false, true);
-				classifySegmentFoldNoThread(Classifiers.Vote, pathToData, pathToOutput, null, false, true);
+				classifySegmentFoldNoThread(Classifiers.Stack, pathToData, pathToOutput, null, false, true);
 			} else {
 				System.out.println("Not every parameter set (Length must be 2)");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println(e.toString());
 		}
 	}
@@ -134,13 +136,15 @@ public class Main {
 	
 	private static AbsClassifier factory(Classifiers c, String pathToData, String pathToOutput, int number, boolean segment) {
 		File arffTrain = new File(pathToOutput + "combinedFold" + number + ".arff");
-		File testFile;
+		File testFile, trainFile = null;
 		if(!segment) {
 			testFile = new File(pathToOutput + "combinedFold" + number + "Test.arff");
 		} else {
 			String pathToTrain = System.getProperty("user.dir") + "/resources/";
 			testFile = new File(pathToTrain + "fold" + number + "_evaluate.txt");
+			trainFile = new File(pathToTrain + "fold" + number + "_train.txt"); 
 		}
+
 		switch(c) {
 		case IBk:
 			return new IBkImpl(arffTrain, testFile, pathToData);
@@ -150,6 +154,8 @@ public class Main {
 			return new RandomForestImpl(arffTrain, testFile, pathToData);
 		case Vote:
 			return new VoteImpl(arffTrain, testFile, pathToData);
+		case Stack:
+			return new StackClassifierImpl(arffTrain, trainFile, testFile, pathToData);
 		default:
 			return null; //Should not happen!
 		}

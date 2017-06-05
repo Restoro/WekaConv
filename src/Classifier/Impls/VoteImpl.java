@@ -34,15 +34,10 @@ public class VoteImpl extends AbsClassifier{
 		return classifier;
 	}
 
-	@Override
-	public Evaluation executeClassifier(boolean output, boolean useSave) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Float executeSegmentClassifier(boolean output, boolean useSave) throws Exception {
-		return this.loadModelExecuteSegment(Vote.class.getSimpleName(), useSave);
+		return this.loadModelExecuteSegment(useSave);
 	}
 
 	@Override
@@ -53,6 +48,12 @@ public class VoteImpl extends AbsClassifier{
 	@Override
 	public String getClassifierName() {
 		return Vote.class.getSimpleName();
+	}
+
+	@Override
+	public Evaluation executeClassifier(boolean output, boolean useSave) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

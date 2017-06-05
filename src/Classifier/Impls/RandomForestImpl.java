@@ -21,24 +21,26 @@ public class RandomForestImpl extends AbsClassifier {
 
 	@Override
 	public Evaluation executeClassifier(boolean output, boolean useSave) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return this.evaluateClassifier(this.generateClassifier(useSave), output);
 	}
 
 	@Override
 	public Float executeSegmentClassifier(boolean output, boolean useSave) throws Exception {
-		return this.loadModelExecuteSegment(RandomForest.class.getSimpleName(), useSave);
+		return this.loadModelExecuteSegment(useSave);
 	}
 
 	@Override
 	public boolean setParams(int[] param) {
-		if(param.length == 1) {
-			iterations = param[0];
-		}
-		if (param.length == 2) {
-			iterations = param[0];
-			numOfThreads = param[1];
-			return true;
+		if(param != null) {
+			if(param.length == 1) {
+				iterations = param[0];
+				return true;
+			}
+			if (param.length == 2) {
+				iterations = param[0];
+				numOfThreads = param[1];
+				return true;
+			}
 		}
 		return false;
 	}

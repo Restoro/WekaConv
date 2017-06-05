@@ -33,7 +33,7 @@ abstract public class AbsClassifier {
 	
 	abstract public boolean setParams(int[] param);
 	
-	protected Float loadModelExecuteSegment(String className, boolean useSave) throws Exception {
+	protected Float loadModelExecuteSegment(boolean useSave) throws Exception {
 		if (useSave) {
 			weka.classifiers.Classifier classi = this.loadOrGenerateClassifier(useSave);
 			return evaluateClassifierSegment(classi);
