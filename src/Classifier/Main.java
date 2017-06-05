@@ -28,8 +28,8 @@ public class Main {
 				String pathToData = args[0];
 				String pathToOutput = args[1];
 				if(convertFiles) convertFiles(useRandomData, pathToTrain, pathToData, pathToOutput);
-				classifySegmentFold(Classifiers.NaiveBayes, pathToData, pathToOutput, null, false, true);
-				//classifySegmentFoldNoThread(Classifiers.RandomForest, pathToData, pathToOutput, new int[] {120, 8}, false, true);
+				//classifySegmentFold(Classifiers.NaiveBayes, pathToData, pathToOutput, null, false, true);
+				classifySegmentFoldNoThread(Classifiers.RandomForest, pathToData, pathToOutput, new int[] {120, 8}, false, true);
 			} else {
 				System.out.println("Not every parameter set (Length must be 2)");
 			}
