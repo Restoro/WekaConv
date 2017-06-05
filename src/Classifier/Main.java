@@ -16,7 +16,7 @@ import weka.classifiers.Evaluation;
 public class Main {
 
 	static final int dataLineCount = 1500;
-	static final int randomNumberCount = 1500;
+	static final int randomNumberCount = 500;
 	static final int numberOfFolds = 4;
 	static final boolean convertFiles = true;
 	static final boolean useRandomData = true;

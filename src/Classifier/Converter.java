@@ -57,14 +57,15 @@ public class Converter {
 		while ((arffLine = arffReader.readLine()) != null) {
 			if (!selectRandom) {
 				writer.write(arffLine + "\n");
-			} else if (randomCounter % randomSelector == 0 && instanceCounter < (randomNumberCount*2)) {
+			} else if (randomCounter % randomSelector == 0 && instanceCounter < randomNumberCount) {
 				writer.write(arffLine + "\n");
 				randomSelector = r.nextInt(dataLineCount / randomNumberCount) + 1;
+				instanceCounter++;
 				randomCounter = 1;
 			} else {
 				randomCounter++;
 			}
-			instanceCounter++;
+			
 		}
 		arffReader.close();
 	}
